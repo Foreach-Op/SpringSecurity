@@ -20,11 +20,12 @@ public class ProjectSecurityConfig {
         // http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
         // http.authorizeHttpRequests((requests)->requests.anyRequest().denyAll());
         // Only HTTP
-        http.requiresChannel(rcc->rcc.anyRequest().requiresInsecure())
+        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession"))
+                .requiresChannel(rcc->rcc.anyRequest().requiresInsecure())
                 .csrf(csrfConfig->csrfConfig.disable())
                 .authorizeHttpRequests((requests)->requests
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
+                .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession").permitAll());
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(hbc->hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         //http.exceptionHandling(ehc->ehc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint())); // It is a global config
