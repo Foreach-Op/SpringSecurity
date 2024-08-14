@@ -1,5 +1,6 @@
 package com.foreach.config;
 
+import com.foreach.exceptionhandling.CustomAccessDeniedHandler;
 import com.foreach.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class ProjectSecurityProdConfig {
                 .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(hbc->hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        http.exceptionHandling(ehc->ehc.accessDeniedHandler(new CustomAccessDeniedHandler())); // It is a global config
         return http.build();
     }
 
