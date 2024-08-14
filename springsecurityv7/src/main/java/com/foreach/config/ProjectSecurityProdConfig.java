@@ -20,7 +20,8 @@ public class ProjectSecurityProdConfig {
         // http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
         // http.authorizeHttpRequests((requests)->requests.anyRequest().denyAll());
         // Only HTTPS
-        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession"))
+        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession").maximumSessions(1))
+                // Only HTTPS
                 .requiresChannel(rcc->rcc.anyRequest().requiresSecure())
                 .csrf(csrfConfig->csrfConfig.disable())
                 .authorizeHttpRequests((requests)->requests

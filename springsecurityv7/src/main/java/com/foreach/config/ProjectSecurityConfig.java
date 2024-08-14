@@ -20,7 +20,9 @@ public class ProjectSecurityConfig {
         // http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
         // http.authorizeHttpRequests((requests)->requests.anyRequest().denyAll());
         // Only HTTP
-        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession"))
+        // Same user can login with one session only
+        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
+                // Only HTTP
                 .requiresChannel(rcc->rcc.anyRequest().requiresInsecure())
                 .csrf(csrfConfig->csrfConfig.disable())
                 .authorizeHttpRequests((requests)->requests
