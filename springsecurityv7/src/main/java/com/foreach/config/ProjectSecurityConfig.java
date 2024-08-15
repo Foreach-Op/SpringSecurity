@@ -19,6 +19,7 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
         // http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
         // http.authorizeHttpRequests((requests)->requests.anyRequest().denyAll());
+        // sessionFixation(sfc->sfc.none()
         // Only HTTP
         // Same user can login with one session only
         http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
