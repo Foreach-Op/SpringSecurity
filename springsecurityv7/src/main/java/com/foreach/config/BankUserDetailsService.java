@@ -26,7 +26,8 @@ public class BankUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer customer = customerRepository.findByEmail(username).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with mail "+username));
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(customer.getRole()));
+        List<SimpleGrantedAuthority> authorities = customer.getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getName())).toList();
         return new User(customer.getEmail(), customer.getPwd(), authorities);
     }
 }
