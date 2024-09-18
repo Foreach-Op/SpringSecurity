@@ -60,8 +60,8 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests((requests)->requests
                 .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
                 .requestMatchers("/myBalance").hasAnyAuthority("VIEWBALANCE", "VIEWACCOUNT")
-                .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
-                .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                .requestMatchers("/myLoans").hasRole("USER")
+                .requestMatchers("/myCards").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/user").authenticated()
                 .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession").permitAll());
         http.formLogin(Customizer.withDefaults());
