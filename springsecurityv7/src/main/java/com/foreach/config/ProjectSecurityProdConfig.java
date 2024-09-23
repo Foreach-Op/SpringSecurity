@@ -2,7 +2,10 @@ package com.foreach.config;
 
 import com.foreach.exceptionhandling.CustomAccessDeniedHandler;
 import com.foreach.exceptionhandling.CustomBasicAuthenticationEntryPoint;
+import com.foreach.filter.AuthoritiesLoggingAfterFilter;
+import com.foreach.filter.AuthoritiesLoggingAtFilter;
 import com.foreach.filter.CsrfCookieFilter;
+import com.foreach.filter.RequestValidationBeforeFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +48,10 @@ public class ProjectSecurityProdConfig {
         })).csrf(csrfConfig->csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                         .ignoringRequestMatchers("/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
-
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class);
         // http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
         // http.authorizeHttpRequests((requests)->requests.anyRequest().denyAll());
         // Only HTTPS
